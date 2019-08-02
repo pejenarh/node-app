@@ -10,13 +10,13 @@ phases:
       - $(aws ecr get-login --no-include-email --region eu-west-1)
       - REPOSITORY="202993557868.dkr.ecr.eu-west-1.amazonaws.com/$IMAGE_NAME:$DOCKERTAG"
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - DOCKERTAG=$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+      - IMAGE_TAG=$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $IMAGE_NAME:$DOCKERTAG .
-      - docker tag $IMAGE_NAME:$DOCKERTAG $REPOSITORY
+      - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_NAME:$IMAGE_TAG $REPOSITORY
   post_build:
     commands:
       - echo Build completed on `date`
